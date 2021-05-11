@@ -2,10 +2,15 @@
 
 CXX=g++
 CXXFLAGS= -Wall
+MAKEARGS=$(CXX) $(CXXFLAGS) -o $@
+
+bst:
+	$(MAKEARGS) lib/Trees/binarysearchtree.cpp src/bst.cpp
+	./$@
 
 btree:
-	$(CXX) $(CXXFLAGS) -o $@ lib/Trees/binarytree.cpp src/btree.cpp
+	$(MAKEARGS) lib/Trees/binarytree.cpp src/btree.cpp
 	./$@
 
 main:
-	$(CXX) $(CXXFLAGS) -o $@ lib/Trees/binarytree.cpp src/main.cpp
+	$(MAKEARGS) lib/Trees/binarytree.cpp src/main.cpp

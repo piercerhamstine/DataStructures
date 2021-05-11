@@ -215,6 +215,7 @@ Node& BinaryTree::Find(int key)
     return *tempNode;
 };
 
+// Returns a reference to the first instance of the specified key, recursively.
 Node& BinaryTree::RecursiveFind(Node* node, int key)
 {
 

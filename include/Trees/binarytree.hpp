@@ -4,9 +4,14 @@
 #include <queue>
 #include <iostream>
 
+// Naive Binary Tree.
+// No real value in using this structure as it performs worse than any other tree structure
+// and has no real benefits over an array.
+
 // Nodes may have a maximum of two children.
 // Nodes are always pushed to the farthest left possible.
 // Nodes are added arbitrarily
+
 
 // Push - Pushes a new node to the tree
 // Pop - Pops the furthest right node, unless given an index/val.
