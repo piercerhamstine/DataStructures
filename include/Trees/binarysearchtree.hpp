@@ -17,6 +17,9 @@
 // Not allow duplicates at all
 // Allow duplicates and have Nodes store a count of how many are present at that position.
 
+#include <queue>
+#include <iostream>
+
 template<typename T>
 struct Node
 {
@@ -27,6 +30,24 @@ struct Node
 
         this->data = data;
     };
+
+    friend bool operator>(const Node& left, const Node& right)
+    {
+        return left->data > right->data;
+    };
+
+    friend bool operator<(const Node& left, const Node& right)
+    {
+        return left->data < right->data;
+    };
+
+    // Using this for now, while I understand overloading operators of templates.
+    // It's something simple that I am overlooking obviously.
+    // 0 if smaller than right side, 1 if great than right side.
+    CompareTo(Node& right)
+    {
+        return(this->data > right.data);
+    }
 
     Node* left;
     Node* right;
@@ -52,7 +73,56 @@ public:
 
     void Insert(T data)
     {
-        
+        // Local variables.
+        Node<T>* newNode = new Node<T>(data);
+        Node<T>* currNode;
+        std::queue<Node<T>*> queue;
+
+        // Edge case of root being a nullptr.
+        if(!this->rootNode)
+        {
+            this->rootNode = newNode;
+        }
+
+        queue.push(this->rootNode);
+
+        while(!queue.empty())
+        {
+            currNode = queue.front();
+            queue.pop();
+
+
+/*          The node is the same as our current node.
+            Decide which methodo of handling duplicates I want to do.
+            if(node == currNode)
+            {
+
+            }
+*/
+            // The node is smaller than the current node, so the node is propagated down the left side.
+            if(!newNode->CompareTo(*currNode))
+            {
+                if(!currNode->left)
+                {
+                    currNode->left = newNode;
+                    return;
+                };
+
+                queue.push(currNode->left);
+                continue;
+            }
+            // The node is larger than the current node, so the node is propagated down the right side.    
+            else
+            {
+                if(!currNode->right)
+                {
+                    currNode->right = newNode;
+                    return;
+                }
+
+                queue.push(currNode->right);
+            }
+        }
     }
 
     Node<T>& Peek()

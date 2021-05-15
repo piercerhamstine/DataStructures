@@ -5,7 +5,7 @@ CXXFLAGS= -Wall
 MAKEARGS=$(CXX) $(CXXFLAGS) -o $@
 
 bst:
-	$(MAKEARGS) lib/Trees/binarysearchtree.cpp src/bst.cpp
+	$(MAKEARGS) include/Trees/binarysearchtree.hpp src/bst.cpp
 	./$@
 
 btree:
