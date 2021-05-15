@@ -31,16 +31,6 @@ struct Node
         this->data = data;
     };
 
-    friend bool operator>(const Node& left, const Node& right)
-    {
-        return left->data > right->data;
-    };
-
-    friend bool operator<(const Node& left, const Node& right)
-    {
-        return left->data < right->data;
-    };
-
     // Using this for now, while I understand overloading operators of templates.
     // It's something simple that I am overlooking obviously.
     // 0 if smaller than right side, 1 if great than right side.
@@ -125,12 +115,27 @@ public:
         }
     }
 
+    std::string VisualizeTree()
+    {
+        // Repeat until queue is empty.
+        // Pop queue
+        // Print node
+        // If has children, print branches characters.
+        // qeueu it's children
+    }
+
+    int GetTreeHeight()
+    {
+        return treeHeight;
+    };
+
     Node<T>& Peek()
     {
         return *rootNode;
     };
 private:
     Node<T>* rootNode;
+    int treeHeight;
 };
 
 #endif
