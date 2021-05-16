@@ -117,6 +117,7 @@ public:
 
     std::string VisualizeTree()
     {
+        // Find tree height for formatting.
         // Repeat until queue is empty.
         // Pop queue
         // Print node
