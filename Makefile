@@ -4,6 +4,10 @@ CXX=g++
 CXXFLAGS= -Wall
 MAKEARGS=$(CXX) $(CXXFLAGS) -o $@
 
+llist:
+	$(MAKEARGS) include/Lists/linkedlist.hpp src/llist.cpp
+	./$@
+
 bst:
 	$(MAKEARGS) include/Trees/binarysearchtree.hpp src/bst.cpp
 	./$@
