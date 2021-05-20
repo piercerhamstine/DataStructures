@@ -227,6 +227,9 @@ Node& BinaryTree::Peek()
     return *rootNode;
 }
 
+// Because of the way insert works for this implementation of a binary tree
+// it is known that the farthest left side of the tree will always contain the max depth/height of the tree.
+
 // Returns the max height of the tree.
 int BinaryTree::GetTreeHeight()
 {

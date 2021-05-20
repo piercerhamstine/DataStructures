@@ -17,8 +17,19 @@
 // Not allow duplicates at all
 // Allow duplicates and have Nodes store a count of how many are present at that position.
 
+
+// TODO:
+/*
+- Handle duplicate nodes.
+- Handle node deletion
+- Handle sorting
+- Handle Inorder, Preorder, Postorder traversal
+*/
+
 #include <queue>
 #include <iostream>
+#include <sstream>
+#include <iomanip>
 
 template<typename T>
 struct Node
@@ -33,11 +44,10 @@ struct Node
 
     // Using this for now, while I understand overloading operators of templates.
     // It's something simple that I am overlooking obviously.
-    // 0 if smaller than right side, 1 if great than right side.
-    CompareTo(Node& right)
+    LessThan(Node& right)
     {
-        return(this->data > right.data);
-    }
+        return (this->data < right.data);
+    };
 
     Node* left;
     Node* right;
@@ -52,6 +62,8 @@ public:
     BinarySearchTree()
     {
         this->rootNode = nullptr;
+
+        this->dirtyTreeHeight = false;
     };
 
     BinarySearchTree(T data)
@@ -59,6 +71,8 @@ public:
         Node<T>* node = new Node<T>(data);
 
         this->rootNode = node;
+
+        this->dirtyTreeHeight = false;
     };
 
     void Insert(T data)
@@ -72,15 +86,19 @@ public:
         if(!this->rootNode)
         {
             this->rootNode = newNode;
+            return;
         }
 
+        // Set the tree height as dirty.
+        this->dirtyTreeHeight = true;
+
+        // Push the root node to the queue.
         queue.push(this->rootNode);
 
         while(!queue.empty())
         {
             currNode = queue.front();
             queue.pop();
-
 
 /*          The node is the same as our current node.
             Decide which methodo of handling duplicates I want to do.
@@ -90,7 +108,7 @@ public:
             }
 */
             // The node is smaller than the current node, so the node is propagated down the left side.
-            if(!newNode->CompareTo(*currNode))
+            if(newNode->LessThan(*currNode))
             {
                 if(!currNode->left)
                 {
@@ -115,19 +133,23 @@ public:
         }
     }
 
+    // Still needs work but works decently for most types.
     std::string VisualizeTree()
     {
-        // Find tree height for formatting.
-        // Repeat until queue is empty.
-        // Pop queue
-        // Print node
-        // If has children, print branches characters.
-        // qeueu it's children
+        std::ostringstream s;
+        PrintTree("", s, this->rootNode, false);
+
+        return s.str();
     }
 
     int GetTreeHeight()
     {
-        return treeHeight;
+        if(dirtyTreeHeight)
+        {
+            this->treeHeight = TreeHeightRecursive(this->rootNode)-1;
+        };
+
+        return this->treeHeight;
     };
 
     Node<T>& Peek()
@@ -135,8 +157,86 @@ public:
         return *rootNode;
     };
 private:
+    int TreeHeightRecursive(Node<T>* node)
+    {
+        int heightLeft = 0;
+        int heightRight = 0;
+
+        if(!node)
+        {
+            return 0;
+        }
+        else
+        {
+            heightLeft = TreeHeightRecursive(node->left);
+            heightRight = TreeHeightRecursive(node->right);
+
+            if(heightLeft > heightRight)
+            {
+                return ++heightLeft;
+            }
+
+            return ++heightRight;
+        }
+    };
+
+    void PrintTree(std::string s, std::ostringstream& sstrm, Node<T>* rootNode, bool isLeftNode)
+    {
+        if(rootNode)
+        {
+            // Push front string
+            sstrm << s;
+
+            // Decide what character to prefix the node with.
+            if(isLeftNode)
+            {
+                sstrm << "|-";
+            }
+            else
+            {
+                sstrm << "|_";
+            }
+
+            // Display node data and push to the new line.
+            sstrm << rootNode->data << std::endl;
+
+            // Create temp string for seperating left and right node strings.
+            // which basically allows us to return to the previous string state.
+            // of before going into the left node.
+            std::string sl = s;
+            if(isLeftNode)
+            {
+                PrintTree(sl+="|  ", sstrm, rootNode->left, true);
+                PrintTree(s+="|  ", sstrm, rootNode->right, false);
+            }
+            else
+            {
+                
+                PrintTree(sl+="   ", sstrm, rootNode->left, true);
+                PrintTree(s+="   ", sstrm, rootNode->right, false);
+            }
+        }
+        else
+        {   
+            sstrm << s;
+
+            if(isLeftNode)
+            {
+                sstrm << "|-";
+            }
+            else
+            {
+                sstrm << "|_";
+            }
+
+            sstrm << "X" << std::endl;
+        }
+    }
+
     Node<T>* rootNode;
     int treeHeight;
+
+    bool dirtyTreeHeight;
 };
 
 #endif
