@@ -2,16 +2,13 @@
 #define LINKEDLIST_HPP
 
 // Linked list, 
-//
-//
+// Nodes hold a pointer to the next node in the list, forming a chain.
+// Nodes connections cannot go backwards.
 //
 
 /* TODO:
- - Find specified node
  - Sort list
- - Delete node
  - InsertAt node
- - GetAt node
  - Deconstructor
  - Copy Constructor
 */
@@ -49,6 +46,8 @@ public:
     {
         // Allocate memory in heap for new node.
         Node<T>* newNode = new Node<T>(data);
+        // Keep a temp so we can traverse the linked list.
+        Node<T>* temp;
 
         // Check for valid root.
         if(!head)
@@ -57,8 +56,7 @@ public:
             return;
         }
 
-        // Keep a temp so we can traverse the linked list.
-        Node<T>* temp = head;
+        temp = head;
 
         while(temp)
         {
@@ -71,6 +69,111 @@ public:
 
             temp = temp->nextNode;
         }
+    };
+
+    void Delete(T data)
+    {
+        Node<T>* currentNode;
+        Node<T>* prevNode;
+        
+        currentNode = head;
+
+        // Handle head removal case.
+        if(currentNode->data == data)
+        {
+            head = head->nextNode;
+            delete currentNode;
+            return;
+        };
+
+        while(currentNode)
+        {
+            if(currentNode->data == data)
+            {
+                // Remove the current node from the chain and relink the previous node to the current node's next node.
+                prevNode->nextNode = currentNode->nextNode;
+
+                delete currentNode;
+
+                return;
+            };
+
+            prevNode = currentNode;
+            currentNode = currentNode->nextNode;
+        };
+    };
+
+    void DeleteAt(int ndx)
+    {
+        Node<T>* currentNode = nullptr;
+        Node<T>* prevNode = nullptr;
+        int currentIndex = 0;
+
+        // Handle index at head case.
+        if(ndx == 0)
+        {
+            currentNode = head;
+            head = head->nextNode;
+            delete currentNode;
+            return;
+        };
+
+        currentNode = head;
+
+        while(currentNode)
+        {
+            if(currentIndex == ndx)
+            {
+                prevNode->nextNode = currentNode->nextNode;
+                delete currentNode;
+                return;
+            };
+
+            prevNode = currentNode;
+            currentNode = currentNode->nextNode;
+            ++currentIndex;
+        };
+    }
+
+    Node<T>& GetAt(int ndx)
+    {
+        Node<T>* currNode = nullptr;
+        int currIndex = 0;
+
+        // Handle index larger than list length.
+        if(ndx > GetLength() || ndx < 0)
+        {
+            return *currNode;
+        };
+
+        currNode = head;
+
+        while(currNode)
+        {
+            if(currIndex == ndx)
+            {
+                return *currNode;
+            };
+
+            currNode = currNode->nextNode;
+            ++currIndex;
+        };
+
+        return *currNode;
+    };
+
+    int GetLength()
+    {
+        Node<T>* temp = head;
+        int count = 0;
+
+        while(temp)
+        {
+            temp = temp->nextNode;
+            count++;
+        };
+
+        return count;
     };
 
     std::string ToString()
