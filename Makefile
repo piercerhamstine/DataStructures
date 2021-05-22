@@ -4,6 +4,10 @@ CXX=g++
 CXXFLAGS= -Wall
 MAKEARGS=$(CXX) $(CXXFLAGS) -o $@
 
+qlist:
+	$(MAKEARGS) include/Lists/queuelist.hpp src/qlist.cpp
+	./$@
+
 llist:
 	$(MAKEARGS) include/Lists/linkedlist.hpp src/llist.cpp
 	./$@
