@@ -13,8 +13,9 @@
  - Copy Constructor
 */
 
+#include <iostream>
 #include <sstream>
-#include "include/Nodes/nodes.hpp"
+#include "../Nodes/nodes.hpp"
 
 template<typename T>
 class LinkedList
@@ -48,10 +49,14 @@ public:
                 // Node before anchor found.
                 if(temp->nextNode == anchorNode)
                 {
-                    // Link new node to current node and anchor node.
+                    // Link new node to current node and anchor node. Leave loop.
                     temp->nextNode = nodeAdded;
                     nodeAdded->nextNode = anchorNode;
+
+                    return;
                 }
+
+                temp = temp->nextNode;
             }
         }
         // List is empty
@@ -71,7 +76,14 @@ public:
     {
         if(head)
         {
-            ListNode<T>* temp = anchorNode;
+            nodeAdded->nextNode = anchorNode->nextNode;
+            anchorNode->nextNode = nodeAdded;
+
+            // Check if tail pointer needs to be updated.
+            if(anchorNode == tail)
+            {
+                tail = nodeAdded;
+            }
         }
         else
         {
@@ -99,6 +111,7 @@ public:
         // Create a new node.
         ListNode<T>* newNode = new ListNode<T>(data);
 
+        AddNodeBehind(tail, newNode);
         // Add node to the back of the list.
     };
 
@@ -120,10 +133,10 @@ public:
 
         ListNode<T>* currNode = head;
 
-        while(currNode->nextNode())
+        while(currNode)
         {
             stringStream << currNode->data << " ";
-            currNode->nextNode();
+            currNode = currNode->nextNode;
         };
         
         return stringStream.str();

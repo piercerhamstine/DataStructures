@@ -1,3 +1,6 @@
+#ifndef UTIL_HPP
+#define UTIL_HPP
+
 #include <iostream>
 
 namespace Util
@@ -8,3 +11,5 @@ namespace Util
         std::cout << toPrint << std::endl;
     };
 }
+
+#endif
