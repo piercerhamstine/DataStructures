@@ -14,185 +14,124 @@
 */
 
 #include <sstream>
-
-template<typename T>
-struct Node
-{
-    Node(T data)
-    {
-        nextNode = nullptr;
-        this->data = data;
-    };
-
-    Node* nextNode;
-    T data;
-};
+#include "include/Nodes/nodes.hpp"
 
 template<typename T>
 class LinkedList
 {
 public:
-    LinkedList()
-    {
-        head = nullptr;
-    };
+    LinkedList() : head(nullptr)
+    {};
 
-    LinkedList(T data)
-    {
-        head = new Node<T>(data);
-    };
+    LinkedList(T data) : head(data)
+    {};
 
-    void Insert(T data)
+    // Adds a node in front of specified node.
+    void AddNodeInfront(ListNode<T>* anchorNode, ListNode<T>* nodeAdded)
     {
-        // Allocate memory in heap for new node.
-        Node<T>* newNode = new Node<T>(data);
-        // Keep a temp so we can traverse the linked list.
-        Node<T>* temp;
-
-        // Check for valid root.
-        if(!head)
+        // List isn't empty.
+        if(head)
         {
-            head = newNode;
-            return;
-        }
-
-        temp = head;
-
-        while(temp)
-        {
-            // Once the end is found, assign our new node to that end. 
-            if(!temp->nextNode)
+            // The head of the list, is the anchorNode
+            if(head == anchorNode)
             {
-                temp->nextNode = newNode;
+                nodeAdded->nextNode = anchorNode;
+                head = nodeAdded;
+
                 return;
+            };
+
+            // Set up temp node, search for anchor node.
+            ListNode<T>* temp = head;
+            while(temp)
+            {
+                // Node before anchor found.
+                if(temp->nextNode == anchorNode)
+                {
+                    // Link new node to current node and anchor node.
+                    temp->nextNode = nodeAdded;
+                    nodeAdded->nextNode = anchorNode;
+                }
             }
+        }
+        // List is empty
+        else
+        {
+            // Set head and tail
+            head = nodeAdded;
+            tail = nodeAdded;
 
-            temp = temp->nextNode;
+            // Clear nextNodes of head and tail.
+            head->nextNode = nullptr;
+            tail->nextNode = nullptr;
         }
     };
 
-    void Delete(T data)
+    void AddNodeBehind(ListNode<T>* anchorNode, ListNode<T>* nodeAdded)
     {
-        Node<T>* currentNode;
-        Node<T>* prevNode;
-        
-        currentNode = head;
-
-        // Handle head removal case.
-        if(currentNode->data == data)
+        if(head)
         {
-            head = head->nextNode;
-            delete currentNode;
-            return;
-        };
-
-        while(currentNode)
+            ListNode<T>* temp = anchorNode;
+        }
+        else
         {
-            if(currentNode->data == data)
-            {
-                // Remove the current node from the chain and relink the previous node to the current node's next node.
-                prevNode->nextNode = currentNode->nextNode;
+            head = nodeAdded;
+            tail = nodeAdded;
 
-                delete currentNode;
-
-                return;
-            };
-
-            prevNode = currentNode;
-            currentNode = currentNode->nextNode;
-        };
+            head->nextNode = nullptr;
+            tail->nextNode = nullptr;
+        }
     };
 
-    void DeleteAt(int ndx)
+    // Adds a new node to the front of the list.
+    void PushFront(const T& data)
     {
-        Node<T>* currentNode = nullptr;
-        Node<T>* prevNode = nullptr;
-        int currentIndex = 0;
+        // Create a new node.
+        ListNode<T>* newNode = new ListNode<T>(data);
 
-        // Handle index at head case.
-        if(ndx == 0)
-        {
-            currentNode = head;
-            head = head->nextNode;
-            delete currentNode;
-            return;
-        };
+        // Add node to the front of the list.
+        AddNodeInfront(head, newNode);
+    };
 
-        currentNode = head;
+    // Adds a new node to the back of the list.
+    void PushBack(const T& data)
+    {
+        // Create a new node.
+        ListNode<T>* newNode = new ListNode<T>(data);
 
-        while(currentNode)
-        {
-            if(currentIndex == ndx)
-            {
-                prevNode->nextNode = currentNode->nextNode;
-                delete currentNode;
-                return;
-            };
+        // Add node to the back of the list.
+    };
 
-            prevNode = currentNode;
-            currentNode = currentNode->nextNode;
-            ++currentIndex;
-        };
+    // Removes specified node from the list.
+    void Remove(ListNode<T>* data)
+    {
+
+    };
+
+    // Removes a node at a specific list index.
+    void RemoveAt(int ndx)
+    {
+
     }
-
-    Node<T>& GetAt(int ndx)
-    {
-        Node<T>* currNode = nullptr;
-        int currIndex = 0;
-
-        // Handle index larger than list length.
-        if(ndx > GetLength() || ndx < 0)
-        {
-            return *currNode;
-        };
-
-        currNode = head;
-
-        while(currNode)
-        {
-            if(currIndex == ndx)
-            {
-                return *currNode;
-            };
-
-            currNode = currNode->nextNode;
-            ++currIndex;
-        };
-
-        return *currNode;
-    };
-
-    int GetLength()
-    {
-        Node<T>* temp = head;
-        int count = 0;
-
-        while(temp)
-        {
-            temp = temp->nextNode;
-            count++;
-        };
-
-        return count;
-    };
-
+    
     std::string ToString()
     {
-        std::ostringstream oss;
+        std::stringstream stringStream;
 
-        Node<T>* temp = head;
-        
-        while(temp)
+        ListNode<T>* currNode = head;
+
+        while(currNode->nextNode())
         {
-            oss << temp->data << " ";
-
-            temp = temp->nextNode;
+            stringStream << currNode->data << " ";
+            currNode->nextNode();
         };
-
-        return oss.str();
+        
+        return stringStream.str();
     };
+
 private:
-    Node<T>* head;
+    ListNode<T>* head;
+    ListNode<T>* tail;
 };
 
 #endif

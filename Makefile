@@ -8,8 +8,8 @@ qlist:
 	$(MAKEARGS) include/Lists/queuelist.hpp src/qlist.cpp
 	./$@
 
-llist:
-	$(MAKEARGS) include/Lists/linkedlist.hpp src/llist.cpp
+llistDriver:
+	$(MAKEARGS)	include/Nodes/nodes.hpp	include/Lists/linkedlist.hpp src/llistDriver.cpp
 	./$@
 
 bst:

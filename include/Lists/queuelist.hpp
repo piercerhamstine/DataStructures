@@ -3,10 +3,9 @@
 
 // Queue
 // FIFO (First In, First Out)
-// 
+// Nodes pushed to the queue are appended to the back
+// Nodes popped from the queue are always taken from the front
 //
-//
-// 
 
 #include <string>
 #include <sstream>
@@ -49,12 +48,13 @@ public:
             return data;
         };
 
+        // Store the data of the head and move head to the next node.
         data = head->data;
         tempNode = head;
         head = head->nextNode;
 
+        // Free allocated memory from heap.
         delete tempNode;
-
         return data;
     };
 
@@ -65,6 +65,7 @@ public:
         if(!tail)
         {
             head = tail = newNode;
+            return;
         }
 
         tail->nextNode = newNode;
