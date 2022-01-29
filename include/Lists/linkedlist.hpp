@@ -124,7 +124,31 @@ public:
     // Removes a node at a specific list index.
     void RemoveAt(int ndx)
     {
+        int currentNdx = 0;
 
+        ListNode<T>* temp = head;
+
+        while(temp)
+        {
+            
+            if(currentNdx+1 == ndx)
+            {
+                // Save node at index for freeing.
+                ListNode<T>* toRemove = temp->nextNode;
+
+                // Update list pointers
+                temp->nextNode = temp->nextNode->nextNode;
+
+                FreeNode(toRemove);
+
+                return;
+            };
+
+            temp = temp->nextNode;
+
+            currentNdx++;
+        };
+        
     }
     
     std::string ToString()
@@ -143,6 +167,13 @@ public:
     };
 
 private:
+    void FreeNode(ListNode<T>* node)
+    {
+        if(node != nullptr)
+        {
+            delete node;
+        };
+    };
     ListNode<T>* head;
     ListNode<T>* tail;
 };

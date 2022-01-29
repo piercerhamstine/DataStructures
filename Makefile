@@ -5,5 +5,5 @@ CXXFLAGS= -Wall
 MAKEARGS=$(CXX) $(CXXFLAGS) -o $@
 
 llistDriver:
-	$(MAKEARGS) in/Nodes/nodes.hpp	in/Lists/linkedlist.hpp src/llistDriver.cpp
+	$(MAKEARGS) include/Nodes/nodes.hpp	include/Lists/linkedlist.hpp src/llistDriver.cpp
 	./$@
