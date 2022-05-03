@@ -24,7 +24,7 @@ public:
     LinkedList() : head(nullptr)
     {};
 
-    LinkedList(T data) : head(data)
+    LinkedList(T data)~ : head(data)
     {};
 
     // Adds a node in front of specified node.
