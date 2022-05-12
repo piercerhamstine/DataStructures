@@ -12,7 +12,7 @@ struct Vertex
 class Graph
 {
 public:
-    void AddVertex(int weight);
+    void AddVertex(Vertex Vertex);
     void AddEdge(int fromVert, int toVert);
 private:
     std::vector<Vertex> vertices;
